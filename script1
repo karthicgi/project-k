@@ -1,6 +1,4 @@
-PASSWORD: " PASSWORD
-read -p "Enter the GROUP name: " GROUP
-[A[B[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[[A[A[B[C[C[C[C[C[C[C[C[C[C[C[C[C#!/bin/bash
+#!/bin/bash
 
 read -p "Enter the username: " USERNAME
 read -p "Enter the full name: " FULL_NAME
