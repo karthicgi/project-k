@@ -1,0 +1,75 @@
+PASSWORD: " PASSWORD
+read -p "Enter the GROUP name: " GROUP
+[A[B[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[[A[A[B[C[C[C[C[C[C[C[C[C[C[C[C[C#!/bin/bash
+
+read -p "Enter the username: " USERNAME
+read -p "Enter the full name: " FULL_NAME
+read -p "Enter the PASSWORD: " PASSWORD
+read -p "Enter the GROUP name: " GROUP
+
+HOME_DIR="/home"
+SHELL="/bin/bash"
+
+# Check for the action argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <create|delete|display|modify>"
+    exit 1
+fi
+
+# Perform the requested action
+if [ "$1" = "create" ]; then
+    # Check if the user already exists
+    if id "$USERNAME" &>/dev/null; then
+        echo "The username '$USERNAME' already exists."
+        exit 1
+    fi
+
+    # Create the user
+    useradd -m -d "$HOME_DIR/$USERNAME" -s "$SHELL" -c "$FULL_NAME" -g "$GROUP" "$USERNAME"
+
+    # Set the user's password
+    echo "$USERNAME:$PASSWORD" | chpasswd
+
+    echo "User '$USERNAME' created successfully."
+
+elif [ "$1" = "delete" ]; then
+    # Check if the user exists
+    if ! id "$USERNAME" &>/dev/null; then
+        echo "User '$USERNAME' does not exist."
+        exit 1
+    fi
+
+    # Delete the user and their home directory
+    userdel -r "$USERNAME"
+    echo "User '$USERNAME' deleted successfully."
+
+elif [ "$1" = "display" ]; then
+    # Check if the user exists
+    if ! id "$USERNAME" &>/dev/null; then
+        echo "User '$USERNAME' does not exist."
+        exit 1
+    fi
+
+    # Display user information
+    echo "Username: $USERNAME"
+    echo "Full Name: $FULL_NAME"
+    echo "Home Directory: $HOME_DIR/$USERNAME"
+    echo "Shell: $SHELL"
+    echo "Group: $GROUP"
+
+elif [ "$1" = "modify" ]; then
+    # Check if the user exists
+    if ! id "$USERNAME" &>/dev/null; then
+        echo "User '$USERNAME' does not exist."
+        exit 1
+    fi
+
+    # Modify user properties
+    usermod -c "$FULL_NAME" -d "$HOME_DIR/$USERNAME" -s "$SHELL" -g "$GROUP" "$USERNAME"
+    echo "User '$USERNAME' modified successfully."
+
+else
+    echo "Usage: $0 <create|delete|display|modify>"
+    exit 1
+fi
+
